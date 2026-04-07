@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Icon generation (Placeholder for Europe) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23FDFBF7'/><path d='M50 10 L80 40 L20 40 Z' fill='%238B4513'/><rect x='25' y='40' width='10' height='40' fill='%23D4AF37'/><rect x='45' y='40' width='10' height='40' fill='%23D4AF37'/><rect x='65' y='40' width='10' height='40' fill='%23D4AF37'/></svg>">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="蜜月 2026">
+    
+    <meta name="theme-color" content="#FDFBF7">
+
+    <title>2026 蜜月之旅</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette: Italy & Swiss Romance */
+            --c-paper: #FDFBF7;         /* Travertine / Marble White */
+            --c-paper-dark: #F0EBE1;    /* Darker Marble */
+            --c-ink: #2C3E50;           /* Deep Navy / Slate */
+            --c-ink-light: #546E7A;     /* Slate Gray */
+            --c-brown: #8B4513;         /* Terracotta / Brick Red */
+            --c-matcha: #4A5D23;        /* Alpine Pine Green */
+            --c-vermilion: #C0392B;     /* Venetian Red */
+            --c-gold: #D4AF37;          /* Renaissance Gold */
+            
+            --font-main: 'Shippori Mincho', 'Noto Serif TC', serif;
+            
+            --s-radius: 12px;
+            --s-shadow: 0 8px 30px rgba(44, 62, 80, 0.08);
+            --s-nav-height: 75px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--c-paper);
+            color: var(--c-ink);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            padding-bottom: calc(var(--s-nav-height) + 30px);
+            line-height: 1.7;
+            /* Subtle texture */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* Utility */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hidden { display: none !important; }
+        
+        h1, h2, h3, p { margin: 0; }
+
+        /* Typography */
+        .title-kanji {
+            font-family: 'Shippori Mincho', serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: 0.15em;
+            color: var(--c-ink);
+            margin-bottom: 0.5rem;
+            text-align: center;
+            border-bottom: 2px solid var(--c-gold);
+            padding-bottom: 20px;
+            margin-top: 25px;
+            position: relative;
+        }
+
+        .section-header {
+            font-size: 1.2rem;
+            color: var(--c-matcha);
+            font-weight: 700;
+            margin: 35px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--s-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--s-shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card:active {
+            transform: scale(0.97);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 6px;
+            margin-bottom: 4px;
+            letter-spacing: 0.02em;
+            color: white;
+            line-height: 1.3;
+        }
+        
+        /* New Europe Tag Colors & Styles */
+        .tag.reserved { background-color: var(--c-vermilion); }
+        .tag.church { background-color: var(--c-brown); }
+        .tag.museum { background-color: var(--c-ink-light); }
+        .tag.italian { background-color: var(--c-matcha); }
+        .tag.swiss { background-color: var(--c-gold); color: var(--c-ink); }
+        .tag.thai { background-color: #D98C6F; }
+        .tag.michelin { background-color: var(--c-ink); }
+
+        /* Area Section Header */
+        .area-header {
+            font-family: var(--font-main);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--c-brown);
+            margin: 25px 0 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--c-brown);
+            display: flex;
+            align-items: center;
+        }
+        .area-header::before {
+            content: '📍';
+            margin-right: 6px;
+            font-size: 1.1rem;
+        }
+
+        /* Spots View Styles */
+        .spot-card {
+            background: white;
+            border-radius: var(--s-radius);
+            box-shadow: var(--s-shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .spot-card:active {
+            transform: scale(0.98);
+        }
+        .spot-img-container {
+            width: 100%;
+            height: 180px;
+            background-color: var(--c-paper-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .spot-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.95;
+            transition: opacity 0.3s;
+        }
+        .spot-header {
+            padding: 20px;
+            padding-bottom: 10px;
+        }
+        .spot-title {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--c-ink);
+        }
+        .spot-subtitle {
+            font-size: 0.9rem;
+            color: var(--c-brown);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        /* Accordion Details */
+        .spot-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background-color: white;
+        }
+        .spot-details.open {
+            max-height: 2000px;
+            transition: max-height 0.4s ease-in-out;
+        }
+        .spot-content {
+            padding: 0 20px 20px 20px;
+            font-size: 0.95rem;
+            color: var(--c-ink);
+            line-height: 1.8;
+            border-top: 1px dashed var(--c-paper-dark);
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+        .spot-section-title {
+            font-weight: bold;
+            color: var(--c-ink);
+            margin-top: 15px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .spot-section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 14px;
+            background: var(--c-gold);
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+        .spot-tips-box {
+            background-color: rgba(212, 175, 55, 0.1); /* Light Gold */
+            border-left: 4px solid var(--c-gold);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9rem;
+        }
+        .expand-hint {
+            text-align: center;
+            color: var(--c-ink-light);
+            font-size: 0.8rem;
+            padding-bottom: 15px;
+            opacity: 0.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Adjust Nav Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 30px);
+            max-width: 580px;
+            height: 70px;
+            background: rgba(44, 62, 80, 0.96); /* Deep Navy */
+            backdrop-filter: blur(15px);
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            padding: 0 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.65rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 19%;
+        }
+        .nav-item.active {
+            color: var(--c-gold);
+        }
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 4px;
+        }
+
+        /* Weather Widget */
+        .weather-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+        .weather-icon {
+            font-size: 1.8rem;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .weather-temp {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--c-ink);
+        }
+        .weather-loc {
+            font-size: 0.7rem;
+            color: var(--c-ink-light);
+            opacity: 0.8;
+        }
+
+        /* Buttons */
+        .btn-map {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: var(--c-brown);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            width: 100%;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .btn-map:hover {
+            filter: brightness(1.1);
+        }
+        .btn-map svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+
+        /* Flights */
+        .flight-card {
+            border-top: 6px solid var(--c-vermilion);
+        }
+        .flight-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: var(--c-paper);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 30px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--c-gold);
+        }
+        .timeline-content {
+            flex: 1;
+        }
+        .timeline-time {
+            font-weight: bold;
+            color: var(--c-brown);
+            margin-right: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .nav-icon-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: var(--c-ink-light);
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            margin-left: 10px;
+            flex-shrink: 0;
+            margin-top: -8px;
+        }
+        .nav-icon-link:active {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        .nav-icon-link svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2px;
+        }
+
+        /* Intro Text */
+        .intro-text {
+            font-size: 0.95rem;
+            color: var(--c-ink-light);
+            text-align: center;
+            margin: 20px 0 30px;
+            padding: 0 10px;
+            font-style: italic;
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--c-paper);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .mon-stamps {
+            font-family: serif;
+            font-size: 2rem;
+            color: var(--c-brown);
+            border: 4px solid var(--c-brown);
+            padding: 10px 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="mon-stamps">蜜月</div>
+        <div style="letter-spacing: 0.3em; color: var(--c-ink-light)">浪漫之旅 2026</div>
+    </div>
+
+    <main class="container">
+        <!-- View: Itinerary -->
+        <div id="view-itinerary" class="view">
+            <h1 class="title-kanji">
+                <span style="display:block; font-size:0.55em; font-weight:500; color:var(--c-brown); letter-spacing:0.15em; margin-bottom:4px; font-family:var(--font-main);">2026 春季</span>
+                行程安排
+            </h1>
+            <p class="intro-text">文藝復興的低語、阿爾卑斯山的純淨與昭披耶河的晚風。</p>
+            <div id="itinerary-list"></div>
+        </div>
+
+        <!-- View: Spots -->
+        <div id="view-spots" class="view hidden">
+            <h1 class="title-kanji">景點導覽</h1>
+            <p class="intro-text">深入探索義大利、瑞士與曼谷的文化亮點。</p>
+            <div id="spot-list"></div>
+        </div>
+
+        <!-- View: Food -->
+        <div id="view-food" class="view hidden">
+            <h1 class="title-kanji">美食資訊</h1>
+            <p class="intro-text">米其林星級饗宴與道地傳統料理的完美結合。</p>
+            <div id="food-list"></div>
+        </div>
+
+        <!-- View: Stay -->
+        <div id="view-stay" class="view hidden">
+            <h1 class="title-kanji">住宿資訊</h1>
+            <p class="intro-text">精選頂級奢華與交通便利的下榻之所。</p>
+            <div id="stay-list"></div>
+        </div>
+
+        <!-- View: Flights -->
+        <div id="view-flights" class="view hidden">
+            <h1 class="title-kanji">航班資訊</h1>
+            <p class="intro-text">長榮航空，優雅開啟與結束您的旅程。</p>
+            <div id="flight-list"></div>
+        </div>
+    </main>
+
+    <nav class="nav-bar">
+        <button class="nav-item active" onclick="switchTab('itinerary')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>行程</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('spots')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>景點</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('food')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            <span>美食</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('stay')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 10a2 2 0 1 0 0 4"/></svg>
+            <span>住宿</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('flights')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L2 22"/><path d="M2 11h9"/><path d="M11 2v9"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <span>航班</span>
+        </button>
+    </nav>
+
+    <script>
+        const data = {
+            flights: [
+                { type: "去程 BR95", date: "4/14 (二)", time: "23:15 - 07:50", flight: "BR95", route: "TPE ➝ MXP", note: "直飛米蘭，跨日抵達馬爾彭薩機場" },
+                { type: "轉機 BR96", date: "4/28 (二)", time: "11:15 - 05:40", flight: "BR96", route: "MXP ➝ TPE", note: "由米蘭返台 (跨日抵達)" },
+                { type: "轉機 BR211", date: "4/29 (三)", time: "08:40 - 11:10", flight: "BR211", route: "TPE ➝ BKK", note: "曼谷蘇凡納布機場，開始海島放鬆段" },
+                { type: "回程 BR212", date: "5/02 (六)", time: "12:25 - 17:15", flight: "BR212", route: "BKK ➝ TPE", note: "返回桃園國際機場，結束甜蜜旅程" }
+            ],
+            stay: [
+                { city: "威尼斯 Venice", hotel: "NH Venezia Santa Lucia (Day 1~2)", area: "車站周邊", note: "免扛行李過橋，位置極佳", map: "NH Venezia Santa Lucia" },
+                { city: "佛羅倫斯 Florence", hotel: "GRAND HOTEL MINERVA (Day 3~5)", area: "新聖母大殿旁", note: "有頂樓泳池/酒吧可看教堂景觀", map: "GRAND HOTEL MINERVA" },
+                { city: "羅馬 Rome", hotel: "Cosmopolita Rome Colosseum (Day 6~8)", area: "市中心", note: "步行可達競技場與威尼斯廣場", map: "Cosmopolita Rome Colosseum" },
+                { city: "琉森 Lucerne", hotel: "Radisson Blu Hotel (Day 9~11)", area: "琉森湖畔", note: "鄰近車站與卡貝爾橋", map: "Radisson Blu Hotel, Lucerne" },
+                { city: "米蘭 Milan", hotel: "Hilton Milan (Day 12~13)", area: "米蘭中央車站", note: "方便最後一天前往機場退稅", map: "Hilton Milan" },
+                { city: "曼谷 Bangkok", hotel: "Four Seasons Hotel Bangkok (Day 15~17)", area: "昭披耶河畔", note: "頂級奢華，絕美無邊際泳池", map: "Four Seasons Hotel Bangkok at Chao Phraya River" }
+            ],
+            food: [
+                // 預約與米其林
+                { name: "Trattoria Zà Zà", type: "佛羅倫斯", region: "Italy", note: "4/18 已預約，品嚐正宗托斯卡尼大牛排", reserved: true, tags: ["reserved", "italian"], map: "Trattoria Zà Zà Florence" },
+                { name: "Alto", type: "羅馬", region: "Italy", note: "4/22 21:00 已預約，高空景觀晚餐", reserved: true, tags: ["reserved", "italian"], map: "Alto Rome" },
+                { name: "Wirtshaus Galliker", type: "琉森", region: "Swiss", note: "4/23 20:00 已預約，百年傳統瑞士菜", reserved: true, tags: ["reserved", "swiss"], map: "Wirtshaus Galliker Luzern" },
+                { name: "Stadtkeller Luzern", type: "琉森", region: "Swiss", note: "4/25 19:00 已預約，瑞士傳統民俗表演晚宴", reserved: true, tags: ["reserved", "swiss"], map: "Stadtkeller Luzern" },
+                { name: "Aksorn", type: "曼谷", region: "Bangkok", note: "4/30 18:30 已預約 (註記蜜月)，米其林星級，泰國失傳食譜", reserved: true, tags: ["reserved", "michelin", "thai"], map: "Aksorn Bangkok" },
+                
+                // 推薦名單
+                { name: "Gucci Osteria Da Massimo Bottura", type: "佛羅倫斯", region: "Italy", note: "米其林一星，位於 Gucci Garden 內，創新擺盤", tags: ["michelin", "italian"], map: "Gucci Osteria Florence" },
+                { name: "Il Palagio", type: "佛羅倫斯", region: "Italy", note: "四季酒店內，米其林星級，托斯卡尼融現代技法", tags: ["michelin", "italian"], map: "Il Palagio Florence" },
+                { name: "Ora D'Aria", type: "佛羅倫斯", region: "Italy", note: "米其林一星，當季食材創新托斯卡尼料理", tags: ["michelin", "italian"], map: "Ora D'Aria Florence" },
+                { name: "Harry's Bar", type: "威尼斯", region: "Italy", note: "威尼斯地標，貝里尼雞尾酒與牛肉薄片發源地", tags: ["italian"], map: "Harry's Bar Venice" },
+                { name: "Ristorante Quadri", type: "威尼斯", region: "Italy", note: "聖馬可廣場旁，米其林一星海鮮創新菜", tags: ["michelin", "italian"], map: "Ristorante Quadri Venice" },
+                { name: "Phra Nakhon", type: "曼谷", region: "Bangkok", note: "嘉佩樂酒店內，精緻泰式傳統料理，河畔美景", tags: ["thai"], map: "Phra Nakhon Capella Bangkok" }
+            ],
+            itinerary: [
+                { day: "Day 1 (4/15 三)", title: "抵達米蘭 ➔ 漂浮之城", loc: "米蘭/威尼斯", items: [{time: "07:50", text: "抵達米蘭機場 (BR95)", map: "Malpensa Airport"}, {time: "12:45", text: "搭乘高鐵 Frecciarossa 前往威尼斯 (已訂)", map: "Milano Centrale"}, {time: "15:12", text: "抵達威尼斯，飯店 Check-in", map: "Venezia Santa Lucia"}, {time: "18:00", text: "運河晚餐與 Cicchetti 氣泡酒"}] },
+                { day: "Day 2 (4/16 四)", title: "威尼斯：總督宮與貢多拉", loc: "威尼斯", items: [{time: "09:00", text: "總督宮與嘆息橋", map: "Doge's Palace"}, {time: "11:00", text: "聖馬可大教堂+黃金祭壇 (已預約)", map: "St Mark's Basilica"}, {time: "15:00", text: "里亞托橋周邊市集漫步", map: "Rialto Bridge"}, {time: "19:00", text: "貢多拉遊船 (日落浪漫體驗)"}] },
+                { day: "Day 3 (4/17 五)", title: "威尼斯 ➔ 佛羅倫斯", loc: "佛羅倫斯", items: [{time: "09:00", text: "搭船前往彩色島 Burano 拍攝小屋", map: "Burano"}, {time: "13:26", text: "搭乘高鐵前往佛羅倫斯 (已訂)", map: "Firenze Santa Maria Novella"}, {time: "15:39", text: "抵達佛羅倫斯飯店"}, {time: "17:30", text: "米開朗基羅廣場看夕陽", map: "Piazzale Michelangelo"}] },
+                { day: "Day 4 (4/18 六)", title: "佛羅倫斯：文藝復興巡禮", loc: "佛羅倫斯", items: [{time: "09:45", text: "聖母百花大教堂登頂 (已預訂)", map: "Cathedral of Santa Maria del Fiore"}, {time: "14:00", text: "烏菲茲美術館", map: "Uffizi Gallery"}, {time: "19:00", text: "晚餐：Trattoria Zà Zà (已預約)", map: "Trattoria Zà Zà Florence"}] },
+                { day: "Day 5 (4/19 日)", title: "佛羅倫斯：深度漫遊", loc: "佛羅倫斯", items: [{time: "10:00", text: "中央市場二樓享用美食", map: "Mercato Centrale"}, {time: "13:00", text: "老橋、彼提宮與波波里花園", map: "Pitti Palace"}, {time: "16:00", text: "精品街區購物"}, {time: "19:00", text: "特色小酒館慢食時光"}] },
+                { day: "Day 6 (4/20 一)", title: "佛羅倫斯 ➔ 羅馬", loc: "羅馬", items: [{time: "10:00", text: "SMN 百年大藥妝店採購", map: "Officina Profumo-Farmaceutica di Santa Maria Novella"}, {time: "13:43", text: "搭乘高鐵 Italo 前往羅馬 (已訂)", map: "Roma Termini"}, {time: "15:19", text: "抵達羅馬"}, {time: "17:00", text: "特雷維噴泉、萬神殿 (預約)、西班牙階梯", map: "Trevi Fountain"}] },
+                { day: "Day 7 (4/21 二)", title: "羅馬：帝國遺跡", loc: "羅馬", items: [{time: "09:00", text: "羅馬競技場", map: "Colosseum"}, {time: "13:00", text: "古羅馬廣場、帕拉提諾山丘", map: "Roman Forum"}, {time: "18:00", text: "卡比托利歐山夜景", map: "Campidoglio"}] },
+                { day: "Day 8 (4/22 三)", title: "羅馬：梵蒂岡聖域", loc: "梵蒂岡", items: [{time: "09:00", text: "梵蒂岡博物館與西斯汀禮拜堂 (已預訂)", map: "Vatican Museums"}, {time: "14:00", text: "聖彼得大教堂 (登頂)", map: "St. Peter's Basilica"}, {time: "17:30", text: "蘋丘觀賞夕陽", map: "Terrazza del Pincio"}, {time: "21:00", text: "晚餐：Alto 高空景觀 (已預約)", map: "Alto Rome"}] },
+                { day: "Day 9 (4/23 四)", title: "羅馬 ➔ 瑞士琉森", loc: "琉森", items: [{time: "10:05", text: "高鐵 Italo 前往米蘭 (已訂)"}, {time: "15:43", text: "米蘭轉乘瑞士火車前往琉森", map: "Milano Centrale"}, {time: "17:41", text: "抵達琉森", map: "Lucerne Station"}, {time: "20:00", text: "晚餐：Wirtshaus Galliker (已預約)", map: "Wirtshaus Galliker Luzern"}] },
+                { day: "Day 10 (4/24 五)", title: "琉森：鐵力士山雪景", loc: "鐵力士山", items: [{time: "09:00", text: "搭火車至 Engelberg", map: "Engelberg"}, {time: "10:30", text: "搭乘360度旋轉纜車上山", map: "Mt Titlis"}, {time: "13:00", text: "冰川吊橋、冰洞體驗"}, {time: "17:00", text: "返回琉森市區"}] },
+                { day: "Day 11 (4/25 六)", title: "琉森：湖光山色", loc: "琉森", items: [{time: "10:00", text: "卡貝爾橋、沈睡的獅子紀念碑", map: "Chapel Bridge"}, {time: "14:00", text: "琉森湖遊船", map: "Lake Lucerne"}, {time: "16:00", text: "舊城區手錶與巧克力採購"}, {time: "19:00", text: "晚餐：Stadtkeller Luzern (已預約)", map: "Stadtkeller Luzern"}] },
+                { day: "Day 12 (4/26 日)", title: "琉森 ➔ 米蘭", loc: "米蘭", items: [{time: "12:18", text: "搭乘 IC 671 前往盧加諾"}, {time: "14:02", text: "轉乘 Trenord 25523 前往米蘭"}, {time: "15:17", text: "抵達米蘭", map: "Milano Centrale"}, {time: "16:30", text: "蒙特拿破崙大道名牌街逛街", map: "Via Monte Napoleone"}] },
+                { day: "Day 13 (4/27 一)", title: "米蘭：時尚與藝術", loc: "米蘭", items: [{time: "10:30", text: "米蘭大教堂屋頂登頂 (已預訂)", map: "Duomo di Milano"}, {time: "12:00", text: "艾曼紐二世拱廊", map: "Galleria Vittorio Emanuele II"}, {time: "15:00", text: "最後的晚餐 (需搶票預訂)", map: "Santa Maria delle Grazie"}, {time: "19:00", text: "米蘭惜別晚宴"}] },
+                { day: "Day 14 (4/28 二)", title: "米蘭 ➔ 甜蜜返家", loc: "MXP 機場", items: [{time: "08:00", text: "整理行李，前往機場"}, {time: "09:00", text: "辦理退稅手續"}, {time: "11:15", text: "搭乘 BR96 返回台北"}] },
+                { day: "Day 15 (4/29 三)", title: "抵達曼谷．河畔秘境", loc: "曼谷", items: [{time: "11:10", text: "抵達曼谷機場 (BR211)", map: "Suvarnabhumi Airport"}, {time: "13:00", text: "Riva del Fiume 輕食午餐", map: "Four Seasons Hotel Bangkok"}, {time: "15:00", text: "曼谷四季酒店 Check-in 休息"}, {time: "17:30", text: "BKK Social Club 享用調酒"}, {time: "19:00", text: "晚餐：Phra Nakhon (嘉佩樂酒店)", map: "Capella Bangkok"}] },
+                { day: "Day 16 (4/30 四)", title: "曼谷：百年老街與星光", loc: "曼谷", items: [{time: "10:00", text: "四季酒店豐盛早午餐"}, {time: "11:30", text: "石龍軍路、Warehouse 30 漫步", map: "Warehouse 30"}, {time: "14:30", text: "Urban Wellness Centre 頂級水療"}, {time: "18:30", text: "晚餐：Aksorn 米其林星級 (已預約)", map: "Aksorn Bangkok"}] },
+                { day: "Day 17 (5/1 五)", title: "曼谷：水上漫遊與落日", loc: "曼谷", items: [{time: "10:30", text: "ICONSIAM 暹羅天地", map: "ICONSIAM"}, {time: "12:30", text: "SookSiam 室內水上市場午餐"}, {time: "15:30", text: "黎明寺 (Wat Arun) 瓷片拼貼絕景", map: "Wat Arun"}, {time: "18:00", text: "Sala Rattanakosin 觀景晚餐", map: "Sala Rattanakosin"}] },
+                { day: "Day 18 (5/2 六)", title: "曼谷 ➔ 滿載而歸", loc: "BKK 機場", items: [{time: "08:30", text: "河畔散步與最後的早餐"}, {time: "09:30", text: "辦理退房，前往機場"}, {time: "12:25", text: "搭乘 BR212 返回台北"}] }
+            ],
+            spots: [
+                {
+                    id: "duomo-florence",
+                    name: "聖母百花大教堂",
+                    subtitle: "文藝復興的建築奇蹟，俯瞰紅瓦之城",
+                    img: "https://images.unsplash.com/photo-1543429776-2782fc8e1acd?auto=format&fit=crop&w=800&q=80",
+                    tags: ["church", "reserved"],
+                    bg: "佛羅倫斯的地標，世界第四大教堂。其巨大的紅磚穹頂由布魯內萊斯基（Brunelleschi）設計，在沒有現代機械的15世紀，這是一項空前絕後的工程奇蹟。",
+                    mustSee: "登頂 463 階狹窄階梯，近距離欣賞瓦薩里繪製的穹頂濕壁畫《末日審判》，登頂後可俯瞰整個佛羅倫斯的紅瓦屋頂與托斯卡尼山丘。",
+                    tips: "登頂票（Brunelleschi Pass）極為搶手，您已預約 4/18 09:45。階梯狹窄且無電梯，請穿著舒適的鞋子並準備好體力。頂部風大，建議攜帶薄外套。"
+                },
+                {
+                    id: "vatican-museums",
+                    name: "梵蒂岡博物館與西斯汀禮拜堂",
+                    subtitle: "歷任教宗的藝術珍藏，米開朗基羅的巔峰之作",
+                    img: "https://images.unsplash.com/photo-1531572753322-ad0110ce3645?auto=format&fit=crop&w=800&q=80",
+                    tags: ["museum", "reserved"],
+                    bg: "世界上最偉大的博物館之一，收藏了天主教會幾個世紀以來積累的無數藝術珍品。包含古希臘羅馬雕塑、文藝復興大師畫作。",
+                    mustSee: "拉斐爾畫室的《雅典學院》，以及行程最高潮：西斯汀禮拜堂（Sistine Chapel）內米開朗基羅繪製的穹頂畫《創世紀》與祭壇畫《最後的審判》。建議預留半天時間細細品味。",
+                    tips: "您已預訂 4/22 門票。館內禁止攜帶大型背包；西斯汀禮拜堂內絕對禁止拍照與喧嘩，且需遵守嚴格服裝規定（不可露肩、短褲或短裙）。"
+                },
+                {
+                    id: "st-marks-basilica",
+                    name: "聖馬可大教堂",
+                    subtitle: "拜占庭風格的黃金殿堂，威尼斯的榮耀",
+                    img: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=800&q=80",
+                    tags: ["church", "reserved"],
+                    bg: "結合了東方拜占庭、伊斯蘭與西方羅馬式風格的奇特建築，見證了威尼斯共和國曾經掌握東西方貿易命脈的輝煌歷史。",
+                    mustSee: "總面積達 8000 平方公尺的黃金馬賽克鑲嵌畫，以及祭壇後方鑲滿 2000 多顆寶石與琺瑯的「黃金祭壇（Pala d'Oro）」。",
+                    tips: "您已預約 4/16 11:00 參觀包含黃金祭壇與博物館。大背包需寄放於外，同樣有嚴格服裝限制。從二樓博物館的露台可以俯瞰聖馬可廣場的絕佳視野。"
+                },
+                {
+                    id: "milan-duomo",
+                    name: "米蘭大教堂",
+                    subtitle: "哥德式建築的極致，白色大理石的森林",
+                    img: "https://images.unsplash.com/photo-1533504856085-f215dc3a3622?auto=format&fit=crop&w=800&q=80",
+                    tags: ["church", "reserved"],
+                    bg: "歷時 600 多年才完工的米蘭地標，外觀有 135 座尖塔與 3000 多尊精美的雕像，馬克吐溫曾形容它為「一首用大理石寫成的詩」。",
+                    mustSee: "搭乘電梯或步行登上教堂屋頂，穿梭在白色大理石尖塔之間，近距離欣賞頂端金色的聖母瑪利亞雕像（Madonnina）。",
+                    tips: "已預約 4/27 10:30 屋頂登頂。進入教堂本堂同樣有服裝限制。旁邊的艾曼紐二世拱廊是世界最美的購物街，可順道參觀並踩踏地上的公牛馬賽克求好運。"
+                },
+                {
+                    id: "colosseum",
+                    name: "羅馬競技場與古羅馬廣場",
+                    subtitle: "角鬥士的舞台，羅馬帝國的心臟",
+                    img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
+                    tags: ["museum"],
+                    bg: "建於西元一世紀的弗萊文圓形劇場，可容納五萬名觀眾，是古羅馬帝國最具代表性的地標，象徵了羅馬的強盛與工程技術。",
+                    mustSee: "競技場內部的地下迷宮（若有買特殊票）、觀眾席的階級設計；旁邊的古羅馬廣場（Roman Forum）與帕拉提諾山丘則是昔日帝國的政經中心遺址。",
+                    tips: "門票極度搶手，需於參觀日前 30 天準時上官網搶票。該區幾乎沒有遮蔽物，務必做好防曬與水分補充。"
+                },
+                {
+                    id: "mt-titlis",
+                    name: "鐵力士山 (Mt. Titlis)",
+                    subtitle: "360度旋轉纜車，終年不化的阿爾卑斯冰川",
+                    img: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
+                    tags: [],
+                    bg: "海拔 3238 公尺，是瑞士中部最高峰。從 Engelberg 搭乘纜車即可輕鬆登頂，是體驗瑞士壯麗雪山的絕佳選擇。",
+                    mustSee: "世界首創的 360 度旋轉纜車（Titlis Rotair）、歐洲海拔最高的懸索吊橋（Titlis Cliff Walk），以及深入冰川 20 公尺的藍色冰洞（Glacier Cave）。",
+                    tips: "山上氣溫極低，請備妥保暖衣物與太陽眼鏡防雪盲。若持有瑞士半價卡（Half Fare Card），購票可享 5 折優惠。山頂餐廳是喝杯熱巧克力的好地方。"
+                },
+                {
+                    id: "wat-arun",
+                    name: "黎明寺 (Wat Arun)",
+                    subtitle: "昭披耶河畔的耀眼明珠，精緻的瓷片拼貼",
+                    img: "https://images.unsplash.com/photo-1558981359-219d6364c9c8?auto=format&fit=crop&w=800&q=80",
+                    tags: ["church"],
+                    bg: "又稱鄭王廟，是泰國境內規模最大的大乘塔。在陽光照射下，塔身鑲嵌的中國彩色碎瓷片會閃爍出耀眼的光芒。",
+                    mustSee: "主塔（高達 82 公尺）複雜精美的雕塑與瓷片裝飾，塔身陡峭的階梯與四個方位的守護神雕像。",
+                    tips: "從 ICONSIAM 搭乘交通船即可輕鬆抵達。建議在下午 3-4 點光線柔和時前往拍攝。傍晚可至對岸的景觀餐廳欣賞點燈後的黎明寺，非常浪漫。"
+                }
+            ]
+        };
+
+        const mapIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+
+        function renderItinerary() {
+            const list = document.getElementById('itinerary-list');
+            list.innerHTML = data.itinerary.map((day, index) => `
+                <div class="card">
+                    <div style="color:var(--c-brown); font-weight:bold; font-size:0.8rem; margin-bottom:4px;">${day.day}</div>
+                    <h3 style="font-size:1.3rem; margin-bottom:20px; color:var(--c-ink);">${day.title}</h3>
+                    <div style="border-left: 2px solid var(--c-paper-dark); margin-left:5px; padding-left:0;">
+                        ${day.items.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-content">
+                                    <span class="timeline-time">${item.time}</span>
+                                    <span>${item.text}</span>
+                                </div>
+                                ${item.map ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-icon-link" aria-label="導航至 ${item.text}">${mapIcon}</a>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFood() {
+            const list = document.getElementById('food-list');
+            list.innerHTML = '';
+
+            const createCard = (item) => `
+                <div class="card" style="${item.reserved ? 'border-left: 5px solid var(--c-vermilion)' : ''}">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <div style="margin-bottom:6px;">
+                                ${item.tags ? item.tags.map(t => {
+                                    let label = t;
+                                    let icon = '';
+                                    if(t==='reserved') { label = '已預約'; icon='🔴'; }
+                                    else if(t==='michelin') { label = '米其林'; icon='⭐'; }
+                                    else if(t==='italian') { label = '義式'; icon='🍝'; }
+                                    else if(t==='swiss') { label = '瑞士'; icon='🧀'; }
+                                    else if(t==='thai') { label = '泰式'; icon='🇹🇭'; }
+                                    return `<span class="tag ${t}">${icon} ${label}</span>`;
+                                }).join('') : ''}
+                            </div>
+                            <h3 style="font-size:1.2rem; margin:4px 0 8px; color:var(--c-ink);">${item.name}</h3>
+                            <p style="font-size:0.9rem; color:var(--c-ink-light);">${item.note}</p>
+                        </div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="btn-map">${mapIcon} 導航前往</a>
+                </div>
+            `;
+
+            // 1. Reserved
+            const reservedItems = data.food.filter(i => i.reserved);
+            if (reservedItems.length > 0) {
+                const reservedSection = document.createElement('div');
+                reservedSection.innerHTML = `<div class="area-header" style="color:var(--c-vermilion); border-color:var(--c-vermilion);">📅 預約行程</div>` + 
+                                            reservedItems.map(createCard).join('');
+                list.appendChild(reservedSection);
+            }
+
+            // 2. Others Grouped
+            const otherItems = data.food.filter(i => !i.reserved);
+            const regions = { 'Italy': '義大利精選', 'Swiss': '瑞士精選', 'Bangkok': '曼谷精選' };
+
+            for (const [key, label] of Object.entries(regions)) {
+                const regionItems = otherItems.filter(i => i.region === key);
+                if (regionItems.length > 0) {
+                    const section = document.createElement('div');
+                    section.innerHTML = `<div class="area-header">${label}</div>` + 
+                                        regionItems.map(createCard).join('');
+                    list.appendChild(section);
+                }
+            }
+        }
+
+        function renderStay() {
+            const list = document.getElementById('stay-list');
+            list.innerHTML = data.stay.map(item => `
+                <div class="card">
+                    <div style="color:var(--c-brown); font-weight:bold; font-size:0.8rem; margin-bottom:5px;">${item.city}</div>
+                    <h3 style="font-size:1.2rem; margin-bottom:8px; color:var(--c-ink);">${item.hotel}</h3>
+                    <p style="font-size:0.9rem; color:var(--c-matcha); font-weight:500; margin-bottom:5px;">📍 ${item.area}</p>
+                    <p style="font-size:0.85rem; color:var(--c-ink-light); font-style:italic;">"${item.note}"</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="btn-map">${mapIcon} 開啟地圖</a>
+                </div>
+            `).join('');
+        }
+
+        function renderFlights() {
+            const list = document.getElementById('flight-list');
+            list.innerHTML = data.flights.map(item => {
+                const times = item.time.split('-').map(t => t.trim());
+                const originTime = times[0];
+                const destTime = times[1];
+                const originCode = item.route.split('➝')[0].trim();
+                const destCode = item.route.split('➝')[1].trim();
+
+                return `
+                <div class="card flight-card">
+                    <div style="display:flex; justify-content:space-between; color:var(--c-ink-light); font-size:0.85rem; margin-bottom:20px; border-bottom:1px dashed var(--c-paper-dark); padding-bottom:10px;">
+                        <span>${item.date}</span>
+                        <span>${item.type.split(' ')[0]}</span>
+                    </div>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div style="text-align:center; flex:1;">
+                            <div style="font-size:2rem; font-weight:700; line-height:1; color:var(--c-ink);">${originCode}</div>
+                            <div style="font-size:1.2rem; font-weight:500; color:var(--c-brown); margin-top:5px;">${originTime}</div>
+                        </div>
+
+                        <div style="text-align:center; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0.8;">
+                            <div style="font-family:'Courier New', monospace; font-weight:bold; font-size:1rem; color:var(--c-ink); background:var(--c-paper-dark); padding:2px 8px; border-radius:4px; margin-bottom:5px;">${item.flight}</div>
+                            <div style="color:var(--c-gold); font-size:1.5rem; transform: rotate(90deg);">✈</div>
+                        </div>
+
+                        <div style="text-align:center; flex:1;">
+                            <div style="font-size:2rem; font-weight:700; line-height:1; color:var(--c-ink);">${destCode}</div>
+                            <div style="font-size:1.2rem; font-weight:500; color:var(--c-brown); margin-top:5px;">${destTime}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px; font-size:0.85rem; color:var(--c-ink-light); text-align:center; background:rgba(0,0,0,0.02); padding:8px; border-radius:4px;">
+                        ${item.note}
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function renderSpots() {
+            const list = document.getElementById('spot-list');
+            list.innerHTML = data.spots.map(spot => `
+                <div class="spot-card" onclick="toggleSpot('${spot.id}')">
+                    <div class="spot-img-container">
+                        <img src="${spot.img}" alt="${spot.name}" class="spot-img" loading="lazy">
+                    </div>
+                    <div class="spot-header">
+                        <div style="margin-bottom:8px;">
+                            ${spot.tags ? spot.tags.map(t => {
+                                let label = t;
+                                let icon = '';
+                                if(t==='reserved') { label = '已預約'; icon='🔴'; }
+                                else if(t==='church') { label = '教堂'; icon='⛪'; }
+                                else if(t==='museum') { label = '博物館'; icon='🏛️'; }
+                                return `<span class="tag ${t}">${icon} ${label}</span>`;
+                            }).join('') : ''}
+                        </div>
+                        <div class="spot-title">${spot.name}</div>
+                        <div class="spot-subtitle">${spot.subtitle}</div>
+                        
+                        <div class="expand-hint" id="hint-${spot.id}">
+                             <span>▼ 點擊展開詳情</span>
+                        </div>
+
+                        <div class="spot-details" id="details-${spot.id}">
+                            <div class="spot-content">
+                                <div class="spot-section-title">背景與特色</div>
+                                <p>${spot.bg}</p>
+
+                                <div class="spot-section-title">必看亮點</div>
+                                <p>${spot.mustSee}</p>
+
+                                <div class="spot-tips-box">
+                                    <div style="font-weight:bold; margin-bottom:5px; color:var(--c-brown);">💡 導遊小撇步</div>
+                                    ${spot.tips}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleSpot(id) {
+            const details = document.getElementById(`details-${id}`);
+            const hint = document.getElementById(`hint-${id}`);
+            const isOpen = details.classList.contains('open');
+
+            if (isOpen) {
+                details.classList.remove('open');
+                hint.innerHTML = '<span>▼ 點擊展開詳情</span>';
+            } else {
+                details.classList.add('open');
+                hint.innerHTML = '<span>▲ 收起詳情</span>';
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const idx = {itinerary:0, spots:1, food:2, stay:3, flights:4}[tabId];
+            if(idx !== undefined) {
+                document.querySelectorAll('.nav-item')[idx].classList.add('active');
+            }
+            window.scrollTo(0,0);
+        }
+
+        window.onload = () => {
+            renderItinerary();
+            renderFood();
+            renderStay();
+            renderFlights();
+            renderSpots();
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 300);
+            }, 800);
+        };
+    </script>
+</body>
+</html>

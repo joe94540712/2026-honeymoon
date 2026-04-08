@@ -162,10 +162,13 @@
         }
         .spot-img-container {
             width: 100%;
-            height: 180px;
+            height: 220px;
             background-color: var(--c-paper-dark);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .spot-img {
             width: 100%;
@@ -290,32 +293,6 @@
             margin-bottom: 4px;
         }
 
-        /* Weather Widget */
-        .weather-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
-        }
-        .weather-icon {
-            font-size: 1.8rem;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-        .weather-temp {
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: var(--c-ink);
-        }
-        .weather-loc {
-            font-size: 0.7rem;
-            color: var(--c-ink-light);
-            opacity: 0.8;
-        }
-
         /* Buttons */
         .btn-map {
             display: inline-flex;
@@ -345,16 +322,8 @@
         .flight-card {
             border-top: 6px solid var(--c-vermilion);
         }
-        .flight-number {
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: var(--c-paper);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
 
-        /* Timeline */
+        /* Timeline & Fixed/Reserved Enhancements */
         .timeline-item {
             margin-bottom: 20px;
             position: relative;
@@ -372,6 +341,12 @@
             height: 8px;
             border-radius: 50%;
             background: var(--c-gold);
+            transition: all 0.3s;
+        }
+        .timeline-item.is-fixed::before {
+            background: var(--c-vermilion);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+            transform: scale(1.2);
         }
         .timeline-content {
             flex: 1;
@@ -381,6 +356,39 @@
             color: var(--c-brown);
             margin-right: 10px;
             font-size: 0.95rem;
+        }
+        .reserved-badge {
+            display: inline-block;
+            background-color: var(--c-vermilion);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .train-info {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(44, 62, 80, 0.05);
+            border: 1px solid rgba(44, 62, 80, 0.15);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--c-ink);
+            margin-top: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .train-icon {
+            margin-right: 6px;
+            font-size: 0.95rem;
+        }
+        .train-no {
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
         
         .nav-icon-link {
@@ -459,7 +467,7 @@
         <!-- View: Spots -->
         <div id="view-spots" class="view hidden">
             <h1 class="title-kanji">景點導覽</h1>
-            <p class="intro-text">深入探索義大利、瑞士與曼谷的文化亮點。</p>
+            <p class="intro-text">深入探索義大利、瑞士與曼谷的歷史足跡。</p>
             <div id="spot-list"></div>
         </div>
 
@@ -525,14 +533,11 @@
                 { city: "曼谷 Bangkok", hotel: "Four Seasons Hotel Bangkok (Day 15~17)", area: "昭披耶河畔", note: "頂級奢華，絕美無邊際泳池", map: "Four Seasons Hotel Bangkok at Chao Phraya River" }
             ],
             food: [
-                // 預約與米其林
                 { name: "Trattoria Zà Zà", type: "佛羅倫斯", region: "Italy", note: "4/18 已預約，品嚐正宗托斯卡尼大牛排", reserved: true, tags: ["reserved", "italian"], map: "Trattoria Zà Zà Florence" },
                 { name: "Alto", type: "羅馬", region: "Italy", note: "4/22 21:00 已預約，高空景觀晚餐", reserved: true, tags: ["reserved", "italian"], map: "Alto Rome" },
                 { name: "Wirtshaus Galliker", type: "琉森", region: "Swiss", note: "4/23 20:00 已預約，百年傳統瑞士菜", reserved: true, tags: ["reserved", "swiss"], map: "Wirtshaus Galliker Luzern" },
                 { name: "Stadtkeller Luzern", type: "琉森", region: "Swiss", note: "4/25 19:00 已預約，瑞士傳統民俗表演晚宴", reserved: true, tags: ["reserved", "swiss"], map: "Stadtkeller Luzern" },
                 { name: "Aksorn", type: "曼谷", region: "Bangkok", note: "4/30 18:30 已預約 (註記蜜月)，米其林星級，泰國失傳食譜", reserved: true, tags: ["reserved", "michelin", "thai"], map: "Aksorn Bangkok" },
-                
-                // 推薦名單
                 { name: "Gucci Osteria Da Massimo Bottura", type: "佛羅倫斯", region: "Italy", note: "米其林一星，位於 Gucci Garden 內，創新擺盤", tags: ["michelin", "italian"], map: "Gucci Osteria Florence" },
                 { name: "Il Palagio", type: "佛羅倫斯", region: "Italy", note: "四季酒店內，米其林星級，托斯卡尼融現代技法", tags: ["michelin", "italian"], map: "Il Palagio Florence" },
                 { name: "Ora D'Aria", type: "佛羅倫斯", region: "Italy", note: "米其林一星，當季食材創新托斯卡尼料理", tags: ["michelin", "italian"], map: "Ora D'Aria Florence" },
@@ -541,95 +546,182 @@
                 { name: "Phra Nakhon", type: "曼谷", region: "Bangkok", note: "嘉佩樂酒店內，精緻泰式傳統料理，河畔美景", tags: ["thai"], map: "Phra Nakhon Capella Bangkok" }
             ],
             itinerary: [
-                { day: "Day 1 (4/15 三)", title: "抵達米蘭 ➔ 漂浮之城", loc: "米蘭/威尼斯", items: [{time: "07:50", text: "抵達米蘭機場 (BR95)", map: "Malpensa Airport"}, {time: "12:45", text: "搭乘高鐵 Frecciarossa 前往威尼斯 (已訂)", map: "Milano Centrale"}, {time: "15:12", text: "抵達威尼斯，飯店 Check-in", map: "Venezia Santa Lucia"}, {time: "18:00", text: "運河晚餐與 Cicchetti 氣泡酒"}] },
-                { day: "Day 2 (4/16 四)", title: "威尼斯：總督宮與貢多拉", loc: "威尼斯", items: [{time: "09:00", text: "總督宮與嘆息橋", map: "Doge's Palace"}, {time: "11:00", text: "聖馬可大教堂+黃金祭壇 (已預約)", map: "St Mark's Basilica"}, {time: "15:00", text: "里亞托橋周邊市集漫步", map: "Rialto Bridge"}, {time: "19:00", text: "貢多拉遊船 (日落浪漫體驗)"}] },
-                { day: "Day 3 (4/17 五)", title: "威尼斯 ➔ 佛羅倫斯", loc: "佛羅倫斯", items: [{time: "09:00", text: "搭船前往彩色島 Burano 拍攝小屋", map: "Burano"}, {time: "13:26", text: "搭乘高鐵前往佛羅倫斯 (已訂)", map: "Firenze Santa Maria Novella"}, {time: "15:39", text: "抵達佛羅倫斯飯店"}, {time: "17:30", text: "米開朗基羅廣場看夕陽", map: "Piazzale Michelangelo"}] },
-                { day: "Day 4 (4/18 六)", title: "佛羅倫斯：文藝復興巡禮", loc: "佛羅倫斯", items: [{time: "09:45", text: "聖母百花大教堂登頂 (已預訂)", map: "Cathedral of Santa Maria del Fiore"}, {time: "14:00", text: "烏菲茲美術館", map: "Uffizi Gallery"}, {time: "19:00", text: "晚餐：Trattoria Zà Zà (已預約)", map: "Trattoria Zà Zà Florence"}] },
-                { day: "Day 5 (4/19 日)", title: "佛羅倫斯：深度漫遊", loc: "佛羅倫斯", items: [{time: "10:00", text: "中央市場二樓享用美食", map: "Mercato Centrale"}, {time: "13:00", text: "老橋、彼提宮與波波里花園", map: "Pitti Palace"}, {time: "16:00", text: "精品街區購物"}, {time: "19:00", text: "特色小酒館慢食時光"}] },
-                { day: "Day 6 (4/20 一)", title: "佛羅倫斯 ➔ 羅馬", loc: "羅馬", items: [{time: "10:00", text: "SMN 百年大藥妝店採購", map: "Officina Profumo-Farmaceutica di Santa Maria Novella"}, {time: "13:43", text: "搭乘高鐵 Italo 前往羅馬 (已訂)", map: "Roma Termini"}, {time: "15:19", text: "抵達羅馬"}, {time: "17:00", text: "特雷維噴泉、萬神殿 (預約)、西班牙階梯", map: "Trevi Fountain"}] },
-                { day: "Day 7 (4/21 二)", title: "羅馬：帝國遺跡", loc: "羅馬", items: [{time: "09:00", text: "羅馬競技場", map: "Colosseum"}, {time: "13:00", text: "古羅馬廣場、帕拉提諾山丘", map: "Roman Forum"}, {time: "18:00", text: "卡比托利歐山夜景", map: "Campidoglio"}] },
-                { day: "Day 8 (4/22 三)", title: "羅馬：梵蒂岡聖域", loc: "梵蒂岡", items: [{time: "09:00", text: "梵蒂岡博物館與西斯汀禮拜堂 (已預訂)", map: "Vatican Museums"}, {time: "14:00", text: "聖彼得大教堂 (登頂)", map: "St. Peter's Basilica"}, {time: "17:30", text: "蘋丘觀賞夕陽", map: "Terrazza del Pincio"}, {time: "21:00", text: "晚餐：Alto 高空景觀 (已預約)", map: "Alto Rome"}] },
-                { day: "Day 9 (4/23 四)", title: "羅馬 ➔ 瑞士琉森", loc: "琉森", items: [{time: "10:05", text: "高鐵 Italo 前往米蘭 (已訂)"}, {time: "15:43", text: "米蘭轉乘瑞士火車前往琉森", map: "Milano Centrale"}, {time: "17:41", text: "抵達琉森", map: "Lucerne Station"}, {time: "20:00", text: "晚餐：Wirtshaus Galliker (已預約)", map: "Wirtshaus Galliker Luzern"}] },
-                { day: "Day 10 (4/24 五)", title: "琉森：鐵力士山雪景", loc: "鐵力士山", items: [{time: "09:00", text: "搭火車至 Engelberg", map: "Engelberg"}, {time: "10:30", text: "搭乘360度旋轉纜車上山", map: "Mt Titlis"}, {time: "13:00", text: "冰川吊橋、冰洞體驗"}, {time: "17:00", text: "返回琉森市區"}] },
-                { day: "Day 11 (4/25 六)", title: "琉森：湖光山色", loc: "琉森", items: [{time: "10:00", text: "卡貝爾橋、沈睡的獅子紀念碑", map: "Chapel Bridge"}, {time: "14:00", text: "琉森湖遊船", map: "Lake Lucerne"}, {time: "16:00", text: "舊城區手錶與巧克力採購"}, {time: "19:00", text: "晚餐：Stadtkeller Luzern (已預約)", map: "Stadtkeller Luzern"}] },
-                { day: "Day 12 (4/26 日)", title: "琉森 ➔ 米蘭", loc: "米蘭", items: [{time: "12:18", text: "搭乘 IC 671 前往盧加諾"}, {time: "14:02", text: "轉乘 Trenord 25523 前往米蘭"}, {time: "15:17", text: "抵達米蘭", map: "Milano Centrale"}, {time: "16:30", text: "蒙特拿破崙大道名牌街逛街", map: "Via Monte Napoleone"}] },
-                { day: "Day 13 (4/27 一)", title: "米蘭：時尚與藝術", loc: "米蘭", items: [{time: "10:30", text: "米蘭大教堂屋頂登頂 (已預訂)", map: "Duomo di Milano"}, {time: "12:00", text: "艾曼紐二世拱廊", map: "Galleria Vittorio Emanuele II"}, {time: "15:00", text: "最後的晚餐 (需搶票預訂)", map: "Santa Maria delle Grazie"}, {time: "19:00", text: "米蘭惜別晚宴"}] },
-                { day: "Day 14 (4/28 二)", title: "米蘭 ➔ 甜蜜返家", loc: "MXP 機場", items: [{time: "08:00", text: "整理行李，前往機場"}, {time: "09:00", text: "辦理退稅手續"}, {time: "11:15", text: "搭乘 BR96 返回台北"}] },
-                { day: "Day 15 (4/29 三)", title: "抵達曼谷．河畔秘境", loc: "曼谷", items: [{time: "11:10", text: "抵達曼谷機場 (BR211)", map: "Suvarnabhumi Airport"}, {time: "13:00", text: "Riva del Fiume 輕食午餐", map: "Four Seasons Hotel Bangkok"}, {time: "15:00", text: "曼谷四季酒店 Check-in 休息"}, {time: "17:30", text: "BKK Social Club 享用調酒"}, {time: "19:00", text: "晚餐：Phra Nakhon (嘉佩樂酒店)", map: "Capella Bangkok"}] },
-                { day: "Day 16 (4/30 四)", title: "曼谷：百年老街與星光", loc: "曼谷", items: [{time: "10:00", text: "四季酒店豐盛早午餐"}, {time: "11:30", text: "石龍軍路、Warehouse 30 漫步", map: "Warehouse 30"}, {time: "14:30", text: "Urban Wellness Centre 頂級水療"}, {time: "18:30", text: "晚餐：Aksorn 米其林星級 (已預約)", map: "Aksorn Bangkok"}] },
-                { day: "Day 17 (5/1 五)", title: "曼谷：水上漫遊與落日", loc: "曼谷", items: [{time: "10:30", text: "ICONSIAM 暹羅天地", map: "ICONSIAM"}, {time: "12:30", text: "SookSiam 室內水上市場午餐"}, {time: "15:30", text: "黎明寺 (Wat Arun) 瓷片拼貼絕景", map: "Wat Arun"}, {time: "18:00", text: "Sala Rattanakosin 觀景晚餐", map: "Sala Rattanakosin"}] },
-                { day: "Day 18 (5/2 六)", title: "曼谷 ➔ 滿載而歸", loc: "BKK 機場", items: [{time: "08:30", text: "河畔散步與最後的早餐"}, {time: "09:30", text: "辦理退房，前往機場"}, {time: "12:25", text: "搭乘 BR212 返回台北"}] }
+                { day: "Day 1 (4/15 三)", title: "抵達米蘭 ➔ 漂浮之城", loc: "米蘭/威尼斯", items: [
+                    {time: "07:50", text: "抵達米蘭機場", map: "Malpensa Airport", transit: "航班 BR95", transitIcon: "✈️"}, 
+                    {time: "12:45", text: "搭乘高鐵前往威尼斯", map: "Milano Centrale", transit: "Frecciarossa 9727", transitIcon: "🚄"}, 
+                    {time: "15:12", text: "抵達威尼斯，飯店 Check-in", map: "Venezia Santa Lucia"}, 
+                    {time: "18:00", text: "運河晚餐與 Cicchetti 氣泡酒"}
+                ]},
+                { day: "Day 2 (4/16 四)", title: "威尼斯：總督宮與貢多拉", loc: "威尼斯", items: [
+                    {time: "09:00", text: "總督宮與嘆息橋", map: "Doge's Palace"}, 
+                    {time: "11:00", text: "聖馬可大教堂+黃金祭壇", map: "St Mark's Basilica", isReserved: true}, 
+                    {time: "15:00", text: "里亞托橋周邊市集漫步", map: "Rialto Bridge"}, 
+                    {time: "19:00", text: "貢多拉遊船 (建議日落時分)"}
+                ]},
+                { day: "Day 3 (4/17 五)", title: "威尼斯 ➔ 佛羅倫斯", loc: "佛羅倫斯", items: [
+                    {time: "09:00", text: "搭船前往彩色島 Burano 拍攝小屋", map: "Burano"}, 
+                    {time: "13:26", text: "搭乘高鐵前往佛羅倫斯", map: "Firenze Santa Maria Novella", transit: "Frecciarossa 9421", transitIcon: "🚄"}, 
+                    {time: "15:39", text: "抵達佛羅倫斯飯店"}, 
+                    {time: "17:30", text: "米開朗基羅廣場看夕陽", map: "Piazzale Michelangelo"}
+                ]},
+                { day: "Day 4 (4/18 六)", title: "佛羅倫斯：文藝復興巡禮", loc: "佛羅倫斯", items: [
+                    {time: "09:45", text: "聖母百花大教堂登頂", map: "Cathedral of Santa Maria del Fiore", isReserved: true}, 
+                    {time: "14:00", text: "烏菲茲美術館", map: "Uffizi Gallery"}, 
+                    {time: "19:00", text: "晚餐：Trattoria Zà Zà", map: "Trattoria Zà Zà Florence", isReserved: true}
+                ]},
+                { day: "Day 5 (4/19 日)", title: "佛羅倫斯：深度漫遊", loc: "佛羅倫斯", items: [
+                    {time: "10:00", text: "中央市場二樓享用美食", map: "Mercato Centrale"}, 
+                    {time: "13:00", text: "老橋、彼提宮與波波里花園", map: "Pitti Palace"}, 
+                    {time: "16:00", text: "精品街區購物"}, 
+                    {time: "19:00", text: "特色小酒館慢食時光"}
+                ]},
+                { day: "Day 6 (4/20 一)", title: "佛羅倫斯 ➔ 羅馬", loc: "羅馬", items: [
+                    {time: "10:00", text: "SMN 百年大藥妝店採購", map: "Officina Profumo-Farmaceutica di Santa Maria Novella"}, 
+                    {time: "13:43", text: "搭乘高鐵前往羅馬", map: "Roma Termini", transit: "Italo 9931", transitIcon: "🚄"}, 
+                    {time: "15:19", text: "抵達羅馬"}, 
+                    {time: "17:00", text: "特雷維噴泉、萬神殿 (需預約)、西班牙階梯", map: "Trevi Fountain"}
+                ]},
+                { day: "Day 7 (4/21 二)", title: "羅馬：帝國遺跡", loc: "羅馬", items: [
+                    {time: "09:00", text: "羅馬競技場 (建議提前預約)", map: "Colosseum"}, 
+                    {time: "13:00", text: "古羅馬廣場、帕拉提諾山丘", map: "Roman Forum"}, 
+                    {time: "18:00", text: "卡比托利歐山夜景", map: "Campidoglio"}
+                ]},
+                { day: "Day 8 (4/22 三)", title: "羅馬：梵蒂岡聖域", loc: "梵蒂岡", items: [
+                    {time: "09:00", text: "梵蒂岡博物館與西斯汀禮拜堂", map: "Vatican Museums", isReserved: true}, 
+                    {time: "14:00", text: "聖彼得大教堂 (登頂)", map: "St. Peter's Basilica"}, 
+                    {time: "17:30", text: "蘋丘觀賞夕陽", map: "Terrazza del Pincio"}, 
+                    {time: "21:00", text: "晚餐：Alto 高空景觀", map: "Alto Rome", isReserved: true}
+                ]},
+                { day: "Day 9 (4/23 四)", title: "羅馬 ➔ 瑞士琉森", loc: "琉森", items: [
+                    {time: "10:05", text: "搭乘高鐵前往米蘭", transit: "Italo 9976", transitIcon: "🚄"}, 
+                    {time: "15:43", text: "米蘭轉乘瑞士火車前往琉森", map: "Milano Centrale", transit: "Trenord 25522", transitIcon: "🚆"}, 
+                    {time: "17:41", text: "抵達琉森", map: "Lucerne Station"}, 
+                    {time: "20:00", text: "晚餐：Wirtshaus Galliker", map: "Wirtshaus Galliker Luzern", isReserved: true}
+                ]},
+                { day: "Day 10 (4/24 五)", title: "琉森：鐵力士山雪景", loc: "鐵力士山", items: [
+                    {time: "09:00", text: "搭火車至 Engelberg", map: "Engelberg"}, 
+                    {time: "10:30", text: "搭乘360度旋轉纜車上山", map: "Mt Titlis"}, 
+                    {time: "13:00", text: "冰川吊橋、冰洞體驗"}, 
+                    {time: "17:00", text: "返回琉森市區"}
+                ]},
+                { day: "Day 11 (4/25 六)", title: "琉森：湖光山色", loc: "琉森", items: [
+                    {time: "10:00", text: "卡貝爾橋、沈睡的獅子紀念碑", map: "Chapel Bridge"}, 
+                    {time: "14:00", text: "琉森湖遊船", map: "Lake Lucerne"}, 
+                    {time: "16:00", text: "舊城區手錶與巧克力採購"}, 
+                    {time: "19:00", text: "晚餐：Stadtkeller Luzern", map: "Stadtkeller Luzern", isReserved: true}
+                ]},
+                { day: "Day 12 (4/26 日)", title: "琉森 ➔ 米蘭", loc: "米蘭", items: [
+                    {time: "12:18", text: "搭乘 IC 列車前往盧加諾", transit: "IC 671", transitIcon: "🚆"}, 
+                    {time: "14:02", text: "轉乘 Trenord 前往米蘭", transit: "Trenord 25523", transitIcon: "🚆"}, 
+                    {time: "15:17", text: "抵達米蘭", map: "Milano Centrale"}, 
+                    {time: "16:30", text: "蒙特拿破崙大道名牌街逛街", map: "Via Monte Napoleone"}
+                ]},
+                { day: "Day 13 (4/27 一)", title: "米蘭：時尚與藝術", loc: "米蘭", items: [
+                    {time: "10:30", text: "米蘭大教堂屋頂登頂", map: "Duomo di Milano", isReserved: true}, 
+                    {time: "12:00", text: "艾曼紐二世拱廊", map: "Galleria Vittorio Emanuele II"}, 
+                    {time: "15:00", text: "最後的晚餐", map: "Santa Maria delle Grazie", isReserved: true}, 
+                    {time: "19:00", text: "米蘭惜別晚宴"}
+                ]},
+                { day: "Day 14 (4/28 二)", title: "米蘭 ➔ 甜蜜返家", loc: "MXP 機場", items: [
+                    {time: "08:00", text: "整理行李，前往機場"}, 
+                    {time: "09:00", text: "辦理退稅手續"}, 
+                    {time: "11:15", text: "搭乘長榮返回台北", transit: "航班 BR96", transitIcon: "✈️"}
+                ]},
+                { day: "Day 15 (4/29 三)", title: "抵達曼谷．河畔秘境", loc: "曼谷", items: [
+                    {time: "11:10", text: "抵達曼谷機場", map: "Suvarnabhumi Airport", transit: "航班 BR211", transitIcon: "✈️"}, 
+                    {time: "13:00", text: "Riva del Fiume 輕食午餐", map: "Four Seasons Hotel Bangkok"}, 
+                    {time: "15:00", text: "曼谷四季酒店 Check-in 休息"}, 
+                    {time: "17:30", text: "BKK Social Club 享用調酒"}, 
+                    {time: "19:00", text: "晚餐：Phra Nakhon (嘉佩樂酒店)", map: "Capella Bangkok"}
+                ]},
+                { day: "Day 16 (4/30 四)", title: "曼谷：百年老街與星光", loc: "曼谷", items: [
+                    {time: "10:00", text: "四季酒店豐盛早午餐"}, 
+                    {time: "11:30", text: "石龍軍路、Warehouse 30 漫步", map: "Warehouse 30"}, 
+                    {time: "14:30", text: "Urban Wellness Centre 頂級水療"}, 
+                    {time: "18:30", text: "晚餐：Aksorn 米其林星級", map: "Aksorn Bangkok", isReserved: true}
+                ]},
+                { day: "Day 17 (5/1 五)", title: "曼谷：水上漫遊與落日", loc: "曼谷", items: [
+                    {time: "10:30", text: "ICONSIAM 暹羅天地", map: "ICONSIAM"}, 
+                    {time: "12:30", text: "SookSiam 室內水上市場午餐"}, 
+                    {time: "15:30", text: "黎明寺 (Wat Arun) 瓷片拼貼絕景", map: "Wat Arun"}, 
+                    {time: "18:00", text: "Sala Rattanakosin 觀景晚餐", map: "Sala Rattanakosin"}
+                ]},
+                { day: "Day 18 (5/2 六)", title: "曼谷 ➔ 滿載而歸", loc: "BKK 機場", items: [
+                    {time: "08:30", text: "河畔散步與最後的早餐"}, 
+                    {time: "09:30", text: "辦理退房，前往機場"}, 
+                    {time: "12:25", text: "搭乘長榮返回台北", transit: "航班 BR212", transitIcon: "✈️"}
+                ]}
             ],
             spots: [
                 {
                     id: "duomo-florence",
                     name: "聖母百花大教堂",
                     subtitle: "文藝復興的建築奇蹟，俯瞰紅瓦之城",
-                    img: "https://images.unsplash.com/photo-1543429776-2782fc8e1acd?auto=format&fit=crop&w=800&q=80",
+                    img: "https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_9000,w_1200,f_auto,q_auto/10345712/768765_754573.jpeg",
                     tags: ["church", "reserved"],
-                    bg: "佛羅倫斯的地標，世界第四大教堂。其巨大的紅磚穹頂由布魯內萊斯基（Brunelleschi）設計，在沒有現代機械的15世紀，這是一項空前絕後的工程奇蹟。",
-                    mustSee: "登頂 463 階狹窄階梯，近距離欣賞瓦薩里繪製的穹頂濕壁畫《末日審判》，登頂後可俯瞰整個佛羅倫斯的紅瓦屋頂與托斯卡尼山丘。",
-                    tips: "登頂票（Brunelleschi Pass）極為搶手，您已預約 4/18 09:45。階梯狹窄且無電梯，請穿著舒適的鞋子並準備好體力。頂部風大，建議攜帶薄外套。"
+                    bg: "始建於 1296 年，由阿諾爾福·迪·坎比奧設計。最令人驚嘆的是其八角形穹頂，由布魯內萊斯基於 1420 年接手，利用「魚骨式」磚塊堆砌法與雙層殼體結構，在不使用傳統木製支撐架的情況下完成了這座當時世界最大的圓頂。",
+                    mustSee: "登頂 463 階狹窄階梯，近距離觀察面積達 3,600 平方公尺的《末日審判》濕壁畫，登頂後可俯瞰整個佛羅倫斯的紅瓦屋頂與托斯卡尼山丘。",
+                    tips: "登頂票（Brunelleschi Pass）極為搶手，您已預約 4/18 09:45。階梯狹窄且無電梯，請穿著舒適的鞋子並準備好體力；入內請遵守服裝規定（不可露肩、露膝）。"
                 },
                 {
                     id: "vatican-museums",
                     name: "梵蒂岡博物館與西斯汀禮拜堂",
                     subtitle: "歷任教宗的藝術珍藏，米開朗基羅的巔峰之作",
-                    img: "https://images.unsplash.com/photo-1531572753322-ad0110ce3645?auto=format&fit=crop&w=800&q=80",
+                    img: "https://res.klook.com/image/upload/w_750,h_469,c_fill,q_85/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/hozvdaykwbjkjc0jl5nz.jpg",
                     tags: ["museum", "reserved"],
-                    bg: "世界上最偉大的博物館之一，收藏了天主教會幾個世紀以來積累的無數藝術珍品。包含古希臘羅馬雕塑、文藝復興大師畫作。",
-                    mustSee: "拉斐爾畫室的《雅典學院》，以及行程最高潮：西斯汀禮拜堂（Sistine Chapel）內米開朗基羅繪製的穹頂畫《創世紀》與祭壇畫《最後的審判》。建議預留半天時間細細品味。",
+                    bg: "世界上最偉大的博物館之一，收藏了天主教會幾個世紀以來積累的古希臘羅馬雕塑與文藝復興大師畫作。原為歷代教宗的宮殿，見證了教會無與倫比的財富與權力。",
+                    mustSee: "拉斐爾畫室的《雅典學院》，以及行程最高潮：西斯汀禮拜堂（Sistine Chapel）內米開朗基羅繪製的穹頂畫《創世紀》與祭壇畫《最後的審判》。",
                     tips: "您已預訂 4/22 門票。館內禁止攜帶大型背包；西斯汀禮拜堂內絕對禁止拍照與喧嘩，且需遵守嚴格服裝規定（不可露肩、短褲或短裙）。"
                 },
                 {
                     id: "st-marks-basilica",
                     name: "聖馬可大教堂",
                     subtitle: "拜占庭風格的黃金殿堂，威尼斯的榮耀",
-                    img: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=800&q=80",
+                    img: "https://i.epochtimes.com/assets/uploads/2021/03/id12845415-shutterstock_1118018780.jpg",
                     tags: ["church", "reserved"],
-                    bg: "結合了東方拜占庭、伊斯蘭與西方羅馬式風格的奇特建築，見證了威尼斯共和國曾經掌握東西方貿易命脈的輝煌歷史。",
-                    mustSee: "總面積達 8000 平方公尺的黃金馬賽克鑲嵌畫，以及祭壇後方鑲滿 2000 多顆寶石與琺瑯的「黃金祭壇（Pala d'Oro）」。",
-                    tips: "您已預約 4/16 11:00 參觀包含黃金祭壇與博物館。大背包需寄放於外，同樣有嚴格服裝限制。從二樓博物館的露台可以俯瞰聖馬可廣場的絕佳視野。"
+                    bg: "建於 9 世紀，最初為存放從埃及偷運回來的聖馬可遺體而建。隨著威尼斯海上貿易繁榮（特別是第四次十字軍東征），威尼斯人帶回大量珍寶裝飾教堂，使其獲得「金色大教堂」的美譽。",
+                    mustSee: "總面積達 8000 平方公尺的黃金馬賽克鑲嵌畫，以及祭壇後方鑲滿 2000 多顆寶石與琺瑯的「黃金祭壇（Pala d'Oro）」。正門上方的四匹青銅馬更是古希臘羅馬藝術珍品。",
+                    tips: "您已預約 4/16 11:00 參觀包含黃金祭壇與博物館。大背包需寄放於外，從二樓博物館的露台可以俯瞰聖馬可廣場的絕佳視野。"
                 },
                 {
                     id: "milan-duomo",
                     name: "米蘭大教堂",
-                    subtitle: "哥德式建築的極致，白色大理石的森林",
-                    img: "https://images.unsplash.com/photo-1533504856085-f215dc3a3622?auto=format&fit=crop&w=800&q=80",
+                    subtitle: "哥德式建築的極致，大理石雕刻的詩篇",
+                    img: "https://en.wikipedia.org/wiki/Special:FilePath/Milan_Cathedral_from_Piazza_del_Duomo.jpg?width=800",
                     tags: ["church", "reserved"],
-                    bg: "歷時 600 多年才完工的米蘭地標，外觀有 135 座尖塔與 3000 多尊精美的雕像，馬克吐溫曾形容它為「一首用大理石寫成的詩」。",
-                    mustSee: "搭乘電梯或步行登上教堂屋頂，穿梭在白色大理石尖塔之間，近距離欣賞頂端金色的聖母瑪利亞雕像（Madonnina）。",
-                    tips: "已預約 4/27 10:30 屋頂登頂。進入教堂本堂同樣有服裝限制。旁邊的艾曼紐二世拱廊是世界最美的購物街，可順道參觀並踩踏地上的公牛馬賽克求好運。"
+                    bg: "自 1386 年動工，歷時近 600 年才完工。打破倫巴底紅磚傳統，改用昂貴的康多利亞粉紅大理石。全教堂擁有 135 座尖塔與超過 3,400 尊精美雕像，是義大利哥德式建築的巔峰。",
+                    mustSee: "搭乘電梯或步行登上教堂屋頂露台（Terraces），穿梭在飛扶壁與白色大理石尖塔之間，近距離欣賞頂端金色的聖母瑪利亞雕像（Madonnina），並俯瞰米蘭市景。",
+                    tips: "已預約 4/27 10:30 屋頂登頂。進入教堂本堂同樣有嚴格服裝限制。旁邊的艾曼紐二世拱廊是世界最美的購物街，可順道參觀並踩踏地上的公牛馬賽克求好運。"
                 },
                 {
                     id: "colosseum",
                     name: "羅馬競技場與古羅馬廣場",
-                    subtitle: "角鬥士的舞台，羅馬帝國的心臟",
-                    img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
+                    subtitle: "角鬥士的血色舞台，羅馬帝國的心臟",
+                    img: "https://en.wikipedia.org/wiki/Special:FilePath/Colosseo_2020.jpg?width=800",
                     tags: ["museum"],
-                    bg: "建於西元一世紀的弗萊文圓形劇場，可容納五萬名觀眾，是古羅馬帝國最具代表性的地標，象徵了羅馬的強盛與工程技術。",
-                    mustSee: "競技場內部的地下迷宮（若有買特殊票）、觀眾席的階級設計；旁邊的古羅馬廣場（Roman Forum）與帕拉提諾山丘則是昔日帝國的政經中心遺址。",
-                    tips: "門票極度搶手，需於參觀日前 30 天準時上官網搶票。該區幾乎沒有遮蔽物，務必做好防曬與水分補充。"
+                    bg: "由維斯帕先皇帝於西元 72 年下令興建，是世界上最大的橢圓形劇場（可容納五萬人）。曾作為角鬥士比賽、海戰模擬與狩獵表演的場地，象徵著古羅馬帝國的強盛與殘酷美學。",
+                    mustSee: "競技場內部的地下迷宮（Hypogeum）、觀眾席嚴格的階級設計；旁邊的古羅馬廣場（Roman Forum）與帕拉提諾山丘則是昔日帝國的政經中心遺址。",
+                    tips: "門票極度搶手，強烈建議提前 30 天上網預約免排隊門票。該區域幾乎沒有遮蔽物，夏季參觀請務必做好防曬並攜帶飲用水。"
                 },
                 {
                     id: "mt-titlis",
                     name: "鐵力士山 (Mt. Titlis)",
-                    subtitle: "360度旋轉纜車，終年不化的阿爾卑斯冰川",
-                    img: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
+                    subtitle: "世界首創旋轉纜車，終年不化的阿爾卑斯冰川",
+                    img: "https://mediaim.expedia.com/localexpert/290369/820f1784-0553-45b9-934d-d18c1bb695ea.jpg",
                     tags: [],
-                    bg: "海拔 3238 公尺，是瑞士中部最高峰。從 Engelberg 搭乘纜車即可輕鬆登頂，是體驗瑞士壯麗雪山的絕佳選擇。",
-                    mustSee: "世界首創的 360 度旋轉纜車（Titlis Rotair）、歐洲海拔最高的懸索吊橋（Titlis Cliff Walk），以及深入冰川 20 公尺的藍色冰洞（Glacier Cave）。",
-                    tips: "山上氣溫極低，請備妥保暖衣物與太陽眼鏡防雪盲。若持有瑞士半價卡（Half Fare Card），購票可享 5 折優惠。山頂餐廳是喝杯熱巧克力的好地方。"
+                    bg: "海拔 3,238 公尺，是瑞士中部最高峰。以 1992 年推出的世界首創「360度旋轉纜車 (Titlis Rotair)」聞名，讓遊客能在緩慢旋轉的車廂中全方位飽覽冰川裂縫與群山美景。",
+                    mustSee: "體驗 360 度旋轉纜車、挑戰歐洲海拔最高（3,000公尺）的鐵力士凌霄岩道（Cliff Walk）懸索吊橋，以及深入冰層 10 公尺的藍色冰洞（Glacier Cave）。",
+                    tips: "山上氣溫極低，即使春夏季前往也建議攜帶保暖外套與太陽眼鏡（防止雪盲）。若持有瑞士半價卡（Half Fare Card）通常可享纜車票 5 折優惠。"
                 },
                 {
                     id: "wat-arun",
                     name: "黎明寺 (Wat Arun)",
                     subtitle: "昭披耶河畔的耀眼明珠，精緻的瓷片拼貼",
-                    img: "https://images.unsplash.com/photo-1558981359-219d6364c9c8?auto=format&fit=crop&w=800&q=80",
+                    img: "https://en.wikipedia.org/wiki/Special:FilePath/Wat_Arun.jpg?width=800",
                     tags: ["church"],
-                    bg: "又稱鄭王廟，是泰國境內規模最大的大乘塔。在陽光照射下，塔身鑲嵌的中國彩色碎瓷片會閃爍出耀眼的光芒。",
-                    mustSee: "主塔（高達 82 公尺）複雜精美的雕塑與瓷片裝飾，塔身陡峭的階梯與四個方位的守護神雕像。",
-                    tips: "從 ICONSIAM 搭乘交通船即可輕鬆抵達。建議在下午 3-4 點光線柔和時前往拍攝。傍晚可至對岸的景觀餐廳欣賞點燈後的黎明寺，非常浪漫。"
+                    bg: "又稱鄭王廟，是泰國境內規模最大的大乘塔。始建於大城王朝，其主塔高達 82 公尺，表面鑲嵌了數以萬計的中國彩色碎瓷片與貝殼，在陽光照射下會閃爍出耀眼的光芒。",
+                    mustSee: "主塔複雜精美的雕塑與瓷片裝飾，塔身陡峭的階梯與四個方位的守護神雕像（夜叉神）。展現了獨特的泰式與高棉建築融合風格。",
+                    tips: "從 ICONSIAM 搭乘交通船即可輕鬆抵達。建議在下午 3-4 點光線柔和時前往拍攝。傍晚可至對岸的景觀餐廳欣賞點燈後的黎明寺，魔幻時刻非常浪漫。"
                 }
             ]
         };
@@ -643,15 +735,26 @@
                     <div style="color:var(--c-brown); font-weight:bold; font-size:0.8rem; margin-bottom:4px;">${day.day}</div>
                     <h3 style="font-size:1.3rem; margin-bottom:20px; color:var(--c-ink);">${day.title}</h3>
                     <div style="border-left: 2px solid var(--c-paper-dark); margin-left:5px; padding-left:0;">
-                        ${day.items.map(item => `
-                            <div class="timeline-item">
+                        ${day.items.map(item => {
+                            const isFixed = item.isReserved || item.transit;
+                            return `
+                            <div class="timeline-item ${isFixed ? 'is-fixed' : ''}">
                                 <div class="timeline-content">
-                                    <span class="timeline-time">${item.time}</span>
-                                    <span>${item.text}</span>
+                                    <div style="display:flex; align-items:center; flex-wrap:wrap; margin-bottom:2px;">
+                                        <span class="timeline-time">${item.time}</span>
+                                        <span style="${isFixed ? 'font-weight:700; color:var(--c-ink);' : ''}">${item.text}</span>
+                                        ${item.isReserved ? `<span class="reserved-badge">已預約</span>` : ''}
+                                    </div>
+                                    ${item.transit ? `
+                                        <div class="train-info">
+                                            <span class="train-icon">${item.transitIcon || '🚆'}</span>
+                                            <span class="train-no">${item.transit}</span>
+                                        </div>
+                                    ` : ''}
                                 </div>
                                 ${item.map ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-icon-link" aria-label="導航至 ${item.text}">${mapIcon}</a>` : ''}
                             </div>
-                        `).join('')}
+                        `}).join('')}
                     </div>
                 </div>
             `).join('');
@@ -797,7 +900,7 @@
                                 <p>${spot.mustSee}</p>
 
                                 <div class="spot-tips-box">
-                                    <div style="font-weight:bold; margin-bottom:5px; color:var(--c-brown);">💡 導遊小撇步</div>
+                                    <div style="font-weight:bold; margin-bottom:5px; color:var(--c-brown);">💡 歷史導覽與小撇步</div>
                                     ${spot.tips}
                                 </div>
                             </div>

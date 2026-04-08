@@ -732,8 +732,13 @@
             const list = document.getElementById('itinerary-list');
             list.innerHTML = data.itinerary.map((day, index) => `
                 <div class="card">
+                    <div class="weather-badge" id="weather-badge-${index}">
+                        <div class="weather-icon">⏳</div>
+                        <div class="weather-temp">載入中...</div>
+                        <div class="weather-loc"></div>
+                    </div>
                     <div style="color:var(--c-brown); font-weight:bold; font-size:0.8rem; margin-bottom:4px;">${day.day}</div>
-                    <h3 style="font-size:1.3rem; margin-bottom:20px; color:var(--c-ink);">${day.title}</h3>
+                    <h3 style="font-size:1.3rem; margin-bottom:20px; color:var(--c-ink); padding-right:70px;">${day.title}</h3>
                     <div style="border-left: 2px solid var(--c-paper-dark); margin-left:5px; padding-left:0;">
                         ${day.items.map(item => {
                             const isFixed = item.isReserved || item.transit;
@@ -936,12 +941,108 @@
             window.scrollTo(0,0);
         }
 
+        // --- Open-Meteo Weather Integration ---
+        const weatherConfig = [
+            { date: "2026-04-15", lat: 45.4408, lon: 12.3122, loc: "威尼斯" },
+            { date: "2026-04-16", lat: 45.4408, lon: 12.3122, loc: "威尼斯" },
+            { date: "2026-04-17", lat: 43.7696, lon: 11.2558, loc: "佛羅倫斯" },
+            { date: "2026-04-18", lat: 43.7696, lon: 11.2558, loc: "佛羅倫斯" },
+            { date: "2026-04-19", lat: 43.7696, lon: 11.2558, loc: "佛羅倫斯" },
+            { date: "2026-04-20", lat: 41.9028, lon: 12.4964, loc: "羅馬" },
+            { date: "2026-04-21", lat: 41.9028, lon: 12.4964, loc: "羅馬" },
+            { date: "2026-04-22", lat: 41.9028, lon: 12.4964, loc: "梵蒂岡" },
+            { date: "2026-04-23", lat: 47.0502, lon: 8.3093, loc: "琉森" },
+            { date: "2026-04-24", lat: 46.8211, lon: 8.4013, loc: "鐵力士山" },
+            { date: "2026-04-25", lat: 47.0502, lon: 8.3093, loc: "琉森" },
+            { date: "2026-04-26", lat: 45.4642, lon: 9.1900, loc: "米蘭" },
+            { date: "2026-04-27", lat: 45.4642, lon: 9.1900, loc: "米蘭" },
+            { date: "2026-04-28", lat: 45.4642, lon: 9.1900, loc: "MXP 機場" },
+            { date: "2026-04-29", lat: 13.7563, lon: 100.5018, loc: "曼谷" },
+            { date: "2026-04-30", lat: 13.7563, lon: 100.5018, loc: "曼谷" },
+            { date: "2026-05-01", lat: 13.7563, lon: 100.5018, loc: "曼谷" },
+            { date: "2026-05-02", lat: 13.7563, lon: 100.5018, loc: "BKK 機場" }
+        ];
+
+        function getWeatherEmoji(code) {
+            if (code <= 1) return '☀️';
+            if (code === 2) return '⛅';
+            if (code === 3) return '☁️';
+            if (code === 45 || code === 48) return '🌫️';
+            if (code >= 51 && code <= 67) return '🌧️';
+            if (code >= 71 && code <= 77) return '❄️';
+            if (code >= 80 && code <= 82) return '🌧️';
+            if (code >= 85 && code <= 86) return '❄️';
+            if (code >= 95) return '⛈️';
+            return '❓';
+        }
+
+        function getWeatherDesc(code) {
+            const map = {
+                0: "晴朗", 1: "晴朗", 2: "多雲時晴", 3: "陰天",
+                45: "霧", 48: "霧",
+                51: "毛毛雨", 53: "毛毛雨", 55: "毛毛雨",
+                61: "小雨", 63: "中雨", 65: "大雨",
+                66: "凍雨", 67: "凍雨",
+                71: "小雪", 73: "中雪", 75: "大雪",
+                77: "雪粒",
+                80: "陣雨", 81: "陣雨", 82: "強陣雨",
+                85: "陣雪", 86: "陣雪",
+                95: "雷雨", 96: "雷雨雹", 99: "雷雨雹"
+            };
+            return map[code] || "未知";
+        }
+
+        async function fetchWeather() {
+            weatherConfig.forEach(async (cfg, index) => {
+                const badge = document.getElementById(`weather-badge-${index}`);
+                try {
+                    // Note: For dates > 16 days in the future, Open-Meteo requires using the 'climate' or 'historical' API
+                    // or simply waiting until closer to the date. For now, we attempt the forecast and handle fallback.
+                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${cfg.lat}&longitude=${cfg.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${cfg.date}&end_date=${cfg.date}`;
+                    const res = await fetch(url);
+                    const json = await res.json();
+
+                    if (json.error) {
+                        if (badge) {
+                            badge.querySelector('.weather-icon').textContent = '📅';
+                            badge.querySelector('.weather-temp').textContent = '待接近日期更新';
+                            badge.querySelector('.weather-loc').textContent = cfg.loc;
+                        }
+                        return;
+                    }
+
+                    if (!json.daily || !json.daily.weather_code) return;
+
+                    const code = json.daily.weather_code[0];
+                    const maxT = Math.round(json.daily.temperature_2m_max[0]);
+                    const minT = Math.round(json.daily.temperature_2m_min[0]);
+                    
+                    const tempStr = `${minT}~${maxT}°C`;
+                    const emoji = getWeatherEmoji(code);
+                    const desc = getWeatherDesc(code);
+
+                    if (badge) {
+                        badge.querySelector('.weather-icon').textContent = emoji;
+                        badge.querySelector('.weather-temp').textContent = `${tempStr} ${desc}`;
+                        badge.querySelector('.weather-loc').textContent = cfg.loc;
+                    }
+                } catch (e) {
+                    console.warn(`Weather fetch failed for ${cfg.loc}`, e);
+                    if (badge) {
+                        badge.querySelector('.weather-icon').textContent = '❌';
+                        badge.querySelector('.weather-temp').textContent = '讀取失敗';
+                    }
+                }
+            });
+        }
+
         window.onload = () => {
             renderItinerary();
             renderFood();
             renderStay();
             renderFlights();
             renderSpots();
+            fetchWeather();
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 setTimeout(() => document.getElementById('loader').style.display = 'none', 300);

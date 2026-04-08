@@ -293,6 +293,34 @@
             margin-bottom: 4px;
         }
 
+        /* Weather Widget */
+        .weather-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(253, 251, 247, 0.95);
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
+            border: 1px solid rgba(44, 62, 80, 0.05);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        .weather-icon {
+            font-size: 1.4rem;
+            line-height: 1;
+            margin-right: 6px;
+        }
+        .weather-temp {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--c-ink);
+            letter-spacing: 0.5px;
+            font-family: 'Courier New', monospace;
+        }
+
         /* Buttons */
         .btn-map {
             display: inline-flex;
@@ -735,7 +763,6 @@
                     <div class="weather-badge" id="weather-badge-${index}">
                         <div class="weather-icon">⏳</div>
                         <div class="weather-temp">載入中...</div>
-                        <div class="weather-loc"></div>
                     </div>
                     <div style="color:var(--c-brown); font-weight:bold; font-size:0.8rem; margin-bottom:4px;">${day.day}</div>
                     <h3 style="font-size:1.3rem; margin-bottom:20px; color:var(--c-ink); padding-right:70px;">${day.title}</h3>
@@ -1005,8 +1032,7 @@
                     if (json.error) {
                         if (badge) {
                             badge.querySelector('.weather-icon').textContent = '📅';
-                            badge.querySelector('.weather-temp').textContent = '待接近日期更新';
-                            badge.querySelector('.weather-loc').textContent = cfg.loc;
+                            badge.querySelector('.weather-temp').textContent = '待更新';
                         }
                         return;
                     }
@@ -1019,12 +1045,10 @@
                     
                     const tempStr = `${minT}~${maxT}°C`;
                     const emoji = getWeatherEmoji(code);
-                    const desc = getWeatherDesc(code);
 
                     if (badge) {
                         badge.querySelector('.weather-icon').textContent = emoji;
-                        badge.querySelector('.weather-temp').textContent = `${tempStr} ${desc}`;
-                        badge.querySelector('.weather-loc').textContent = cfg.loc;
+                        badge.querySelector('.weather-temp').textContent = tempStr;
                     }
                 } catch (e) {
                     console.warn(`Weather fetch failed for ${cfg.loc}`, e);

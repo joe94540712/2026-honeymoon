@@ -1,0 +1,22 @@
+{
+  "name": "2026 蜜月之旅",
+  "short_name": "蜜月 2026",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#D4AF37",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23D4AF37'/><g transform='translate(40, 40) scale(1)'><path d='M50 35 C35 20 15 35 15 50 C15 70 50 85 50 85 C50 85 85 70 85 50 C85 35 65 20 50 35 Z' fill='%23FDFBF7'/><path d='M50 20 L55 45 L80 50 L55 55 L50 80 L45 55 L20 50 L45 45 Z' fill='%23C0392B'/></g></svg>",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23D4AF37'/><g transform='translate(113.7, 113.7) scale(2.84)'><path d='M50 35 C35 20 15 35 15 50 C15 70 50 85 50 85 C50 85 85 70 85 50 C85 35 65 20 50 35 Z' fill='%23FDFBF7'/><path d='M50 20 L55 45 L80 50 L55 55 L50 80 L45 55 L20 50 L45 45 Z' fill='%23C0392B'/></g></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

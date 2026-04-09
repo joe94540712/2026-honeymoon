@@ -12,6 +12,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="蜜月 2026">
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FDFBF7">
 
     <title>2026 蜜月之旅</title>
@@ -1032,8 +1034,9 @@
 
                     if (json.error) {
                         if (badge) {
-                            badge.querySelector('.weather-icon').textContent = '📅';
-                            badge.querySelector('.weather-temp').textContent = '待更新';
+                            badge.querySelector('.weather-icon').textContent = '☁️';
+                            badge.querySelector('.weather-icon').style.marginRight = '0';
+                            badge.querySelector('.weather-temp').style.display = 'none';
                         }
                         return;
                     }
